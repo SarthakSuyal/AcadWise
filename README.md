@@ -137,19 +137,20 @@ gcc -std=c11 -Wall -Wextra *.c -o acadwise.exe
 | `storage.c` | Persistent file storage |
 | `ui.c` | Terminal interface |
 
+
 ## Testing
 
-Sample test cases for the working program:
+AcadWise was tested using normal inputs, invalid inputs,
+deadline scenarios, and data persistence operations.
 
 | Test Case | Expected Output | Actual Output |
 |---|---|---|
-| Add a valid task | Task created | To be verified |
-| Enter invalid date | Input rejected | To be verified |
-| Update task progress | Remaining hours reduced | To be verified |
-| Insufficient study hours | Deadline warning | To be verified |
-| Restart application | Saved tasks restored | To be verified |
+| Add a valid task | Task created | Task added successfully |
+| Enter an invalid date | Input rejected | Invalid date message displayed |
+| Update task progress | Remaining hours decrease | Remaining hours updated correctly |
+| Insufficient study hours | Deadline warning | AT RISK status displayed |
+| Restart application | Saved tasks restored | Tasks restored successfully |
 
-*Replace the final column with observed results from the final tested build.*
 
 ## C Concepts Used
 
@@ -161,11 +162,10 @@ Structures, arrays, strings, pointers, functions, loops, conditionals, sorting, 
 
 | Detail | Information |
 |---|---|
-| Team Number | To be added |
-| Batch | To be added |
+| Batch | 35-36 |
 | Member 1 | Sarthak Suyal |
-| Member 2 | To be added |
-| Member 3 | To be added |
+| Member 2 | Shakir |
+| Member 3 | Divyanshi Varshney |
 
 ## Future Scope
 
