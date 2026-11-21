@@ -1,146 +1,191 @@
-# AcadWise
+# 🎓 AcadWise
 
-**Smart Academic Priority & Recovery System**  
-*Plan smarter. Prioritize better. Meet deadlines.*
+### Smart Academic Priority & Recovery System
 
-AcadWise is a modular, command-line academic workload planner written in **C11**. It helps students record assignments, rank work by urgency and importance, plan study sessions, evaluate deadline feasibility, and create revised schedules when they fall behind.
+**Plan Smarter. Prioritize Better. Meet Deadlines.**
 
-> **Project status:** Functional C prototype. This is a rule-based planner, not an AI system. Scheduling suggestions depend on the accuracy of entered estimates and availability.
+![C](https://img.shields.io/badge/Language-C11-00599C?style=flat-square&logo=c)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-238636?style=flat-square)
+![Interface](https://img.shields.io/badge/Interface-CLI-30363D?style=flat-square)
+![Architecture](https://img.shields.io/badge/Architecture-Modular-8957E5?style=flat-square)
 
-## The problem
+---
 
-Students often manage several assignments, lab records, projects and quizzes with overlapping deadlines. A basic to-do list shows what is due but does not help assess whether the workload fits the time available. AcadWise combines task tracking with transparent priority and scheduling calculations.
+## About the Project
+
+**AcadWise** is a terminal-based academic management system developed in C that helps students organize assignments, prioritize deadlines, manage study time, and recover from scheduling conflicts.
+
+Unlike a traditional task manager, AcadWise evaluates whether academic workloads are achievable and recommends adjustments when students fall behind.
 
 ## Features
 
-| Menu | Feature | Description |
-|---|---|---|
-| 1 | Add task | Record a title, subject, deadline, importance, difficulty and estimated effort. |
-| 2 | View tasks | Show task details, countdowns, progress and completion status. |
-| 3 | Priority ranking | Score and rank pending tasks using a rule-based heuristic. |
-| 4 | Daily study planner | Allocate today's available study hours to pending tasks in priority order, including partial allocations. |
-| 5 | Deadline risk analyzer | Compare cumulative work due by each deadline against estimated study capacity. |
-| 6 | Academic Rescue Mode | Propose a revised, earliest-deadline-first schedule from remaining work. |
-| 7 | Complete task | Mark an assignment finished. |
-| 8 | Progress dashboard | Summarize completion, urgent and overdue tasks, remaining hours and subject workloads. |
-| 9 | Delete task | Remove a selected task after confirmation. |
-| 10 | Update progress | Record hours worked and update remaining effort. |
-| 0 | Save and exit | Save tasks and close the program. |
+| Feature | Description |
+|---|---|
+| Task Management | Add, view, complete, update and delete assignments |
+| Smart Priority Engine | Rank assignments by urgency, importance, difficulty and workload |
+| Daily Study Scheduler | Allocate available study hours to pending tasks |
+| Deadline Risk Analyzer | Detect workload shortfalls before upcoming deadlines |
+| Academic Rescue Mode | Generate revised study schedules |
+| Progress Dashboard | Track completion rates and subject-wise workloads |
+| Automatic Countdown | Calculate remaining days using the system date |
+| Persistent Storage | Save tasks locally with backup and recovery support |
 
-Additional capabilities include input validation, date-based countdowns, local file persistence, a reusable terminal UI, and persistent task IDs.
+## Terminal Preview
 
-## How the algorithms work
+AcadWise provides an interactive, menu-driven command-line interface.
 
-### Priority score
+```text
+==================================================
+  ACADWISE v1.0
+==================================================
+  SMART ACADEMIC PRIORITY & RECOVERY
 
-The priority engine uses:
+  TASK MANAGEMENT
+  [1]  Add New Task
+  [2]  View All Tasks
+  [7]  Mark Task Completed
+  [9]  Delete Task
+  [10] Update Task Progress
 
-`P = 4U + 3I + 2D + H`
+  SMART PLANNING
+  [3]  Smart Priority Ranking
+  [4]  Daily Study Scheduler
+  [5]  Deadline Risk Analyzer
+  [6]  Academic Rescue Mode
 
-- `U`: urgency based on days until deadline (10 if due today/overdue; 9 if due tomorrow; 7 within three days; 4 within seven days; otherwise 1).
-- `I`: importance from 1 to 5.
-- `D`: difficulty from 1 to 5.
-- `H`: whole remaining hours, capped at 8.
+  ANALYTICS
+  [8]  Academic Progress Dashboard
 
-Higher scores are ranked first. This is a custom heuristic, not a guaranteed optimal schedule.
+  [0]  Save & Exit
+==================================================
+```
 
-### Daily study planner
+## How AcadWise Works
 
-Pending tasks are sorted by priority. Available hours are allocated to each task in turn; a task can receive a partial allocation. **Generating a plan does not mark work as completed.** Actual progress is recorded separately.
+```text
+       Academic Task Input
+                |
+                v
+       Task Management
+                |
+                v
+       Priority Calculation
+                |
+        +-------+-------+
+        |               |
+        v               v
+   Study Planner   Risk Analyzer
+        |               |
+        +-------+-------+
+                |
+                v
+        Recovery Planning
+                |
+                v
+        Progress Dashboard
+                |
+                v
+        Persistent Storage
+```
 
-### Deadline risk analyzer
+### Priority Algorithm
 
-Pending tasks are ordered by deadline and grouped when they share a date. The analyzer compares cumulative work due by a checkpoint with `(days_remaining + 1) * daily_study_hours`. The estimate assumes study time is available today and on deadline days, and that tasks can be split into smaller sessions.
+AcadWise calculates task priority using a rule-based scoring formula:
+
+**Priority = 4 × Urgency + 3 × Importance + 2 × Difficulty + Workload**
+
+The workload component uses whole remaining hours capped at eight. Higher scores receive higher priority.
+
+### Deadline Feasibility
+
+The Risk Analyzer compares cumulative work due by each deadline against available study capacity.
+
+**Available Capacity = Available Days × Daily Study Hours**
+
+A positive workload shortfall indicates that a deadline may be at risk.
 
 ### Academic Rescue Mode
 
-Rescue Mode produces a revised day-by-day schedule using current remaining workload, earliest deadlines, and daily study availability. It reports unscheduled work and distinguishes tasks outside its 30-day planning horizon. It **does not** automatically detect missed historical sessions or modify actual task progress.
+Rescue Mode uses an earliest-deadline-first approach to generate a revised schedule based on pending work and daily study availability.
 
-## Project structure
+It does not automatically detect missed sessions or modify actual task progress.
 
-```text
-AcadWise/
-├── main.c          # Menu and application entry point
-├── AcadWise.h      # Shared Task structure and declarations
-├── tasks.c         # Add, view, complete, delete, progress
-├── input.c         # Input validation
-├── dates.c         # Calendar validation and countdowns
-├── priority.c      # Priority scoring and ranking
-├── scheduler.c     # Daily study allocation
-├── risk.c          # Deadline feasibility checks
-├── rescue.c        # Revised recovery scheduling
-├── dashboard.c     # Progress and workload summaries
-├── storage.c       # Local persistence and backup handling
-├── ui.c            # Terminal presentation helpers
-├── README.md       # This guide
-└── .gitignore      # Local files excluded from Git
-```
+## Getting Started
 
-## Requirements
+### Requirements
 
-- A C11-compatible compiler (GCC or Clang)
-- A terminal/command prompt
-- No external C libraries required for the CLI application
+- A C11-compatible compiler, such as GCC or Clang
+- A terminal
+- VS Code or another code editor (optional)
 
-## Build and run
-
-Open a terminal **inside the project directory**.
-
-**macOS (Clang):**
+### Clone the Repository
 
 ```bash
-clang -std=c11 -Wall -Wextra -Wpedantic *.c -o acadwise
+git clone https://github.com/sarthaksuyal/AcadWise.git
+cd AcadWise
+```
+
+### macOS / Linux
+
+```bash
+gcc -std=c11 -Wall -Wextra *.c -o acadwise
 ./acadwise
 ```
 
-**Linux (GCC):**
+On macOS, `clang` can be used instead of `gcc`.
 
-```bash
-gcc -std=c11 -Wall -Wextra -Wpedantic *.c -o acadwise
-./acadwise
-```
-
-**Windows (PowerShell with MinGW-w64 GCC installed):**
+### Windows (MinGW-w64)
 
 ```powershell
-gcc -std=c11 -Wall -Wextra -Wpedantic (Get-ChildItem -Filter *.c).Name -o acadwise.exe
+gcc -std=c11 -Wall -Wextra *.c -o acadwise.exe
 .\acadwise.exe
 ```
 
-Compile again after editing source files. The source is intended to be cross-platform; builds on all target operating systems should be verified separately.
+## Project Structure
 
-## Quick demonstration
+| File | Responsibility |
+|---|---|
+| `main.c` | Application entry point and navigation |
+| `AcadWise.h` | Shared structures and declarations |
+| `tasks.c` | Academic task management |
+| `input.c` | Input validation |
+| `priority.c` | Priority calculation and ranking |
+| `scheduler.c` | Daily study planning |
+| `dates.c` | Date calculations and countdown |
+| `risk.c` | Deadline feasibility analysis |
+| `rescue.c` | Academic recovery planning |
+| `dashboard.c` | Progress and workload statistics |
+| `storage.c` | File persistence and backups |
+| `ui.c` | Reusable terminal interface components |
 
-1. Add a programming assignment due tomorrow, requiring 4 hours.
-2. Add a mathematics task due in three days, requiring 2 hours.
-3. Open **Priority Ranking** and explain the scores.
-4. Generate a **Daily Study Plan** with 3 available hours.
-5. Record 1 hour of actual progress and inspect the updated workload.
-6. Run the **Deadline Risk Analyzer** with limited daily availability.
-7. Run **Academic Rescue Mode** and compare the revised schedule.
-8. Open the **Progress Dashboard**, then save and restart to verify persistence.
+## Data Storage
 
-## Data storage and privacy
+AcadWise stores task records in a local, versioned text file named `tasks.txt`.
 
-AcadWise saves task data locally in `tasks.txt` (a versioned text format). It may also create backup, temporary, and legacy-import files. These files are **ignored by Git** so teammates do not accidentally publish personal task records. Each clone starts with its own local dataset. Keep a backup before testing recovery or changing storage code.
+The application supports automatic saving, permanent task IDs, and backup-based recovery.
 
-## Known limitations
+Local task records, backup files, and compiled executables are excluded from Git through `.gitignore`.
 
-- Study time is estimated; real completion speed may differ.
-- Risk analysis assumes a constant daily study capacity and includes deadline days.
-- Rescue Mode replans current work but does not track historical missed sessions.
-- The recovery planner considers a maximum 30-day horizon.
-- The terminal UI is not a graphical desktop application.
-- File backup/replacement is designed to improve recoverability but is not guaranteed atomic across all platforms.
+## C Programming Concepts
 
-## C concepts demonstrated
+Structures • Arrays • Strings • Functions • Loops • Conditional Statements • Sorting • File Handling • Pointers • Preprocessor Directives
 
-Structures, arrays, strings, functions, modular programming, header files, conditionals, loops, searching, sorting, formatted input/output, file handling, and date calculations.
+## Current Limitations
 
-## Team and academic context
+- The scheduler assumes user-provided study availability.
+- Rescue Mode replans remaining work but does not store historical study sessions.
+- Scheduling is rule-based rather than AI-powered.
+- Cross-platform source compatibility is intended; native platform testing should be completed.
+- File backup recovery improves reliability but is not guaranteed to be atomic during unexpected interruptions.
 
-Developed as a **C Programming Mini Hackathon** project by a three-member team. Add the confirmed team name, member names, batch/section, and faculty details here before final submission.
+## Future Improvements
 
-## License
+- Graphical desktop interface
+- Calendar integration
+- Study-session history
+- Custom daily availability
+- Automatic schedule comparisons
 
-No license has been selected yet. Until a license is added, standard copyright rules apply; publishing the code does not automatically grant reuse permissions.
+---
+
+**AcadWise** — Built with C, designed to make academic planning more manageable.
