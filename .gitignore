@@ -1,0 +1,46 @@
+
+# =====================================
+# AcadWise - Git Ignore
+# =====================================
+
+# Compiled executables
+acadwise
+acadwise.exe
+*.exe
+*.out
+*.o
+*.obj
+*.app
+
+# Local task data
+tasks.txt
+tasks.dat
+tasks.bak
+tasks.tmp
+tasks_backup.dat
+tasks_manual_backup.txt
+next_id.dat
+next_id_backup.dat
+
+# Additional local data and backups
+*.bak
+*.tmp
+*.log
+
+# macOS files
+.DS_Store
+.AppleDouble
+
+# Windows files
+Thumbs.db
+Desktop.ini
+
+# VS Code local settings
+.vscode/
+
+# Archives
+*.zip
+
+# Temporary files
+*~
+*.swp
