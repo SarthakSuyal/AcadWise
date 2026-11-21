@@ -50,25 +50,19 @@ The objective is to make academic workload management more structured using fund
 
 ## System Architecture
 
-```text
-                 ACADWISE
-                    |
-             Task Management
-                    |
-          +---------+---------+
-          |                   |
-    Priority Engine      Deadline Analyzer
-          |                   |
-    Study Scheduler           |
-          |                   |
-          +---------+---------+
-                    |
-              Rescue Mode
-                    |
-            Progress Dashboard
+AcadWise follows a modular architecture where individual
+components handle different responsibilities.
 
-      Shared Data: Task Structures
-      Persistence: File Storage
+```mermaid
+flowchart TD
+    A[Academic Task Input] --> B[Task Management]
+    B --> C[Priority Engine]
+    C --> D[Daily Study Scheduler]
+    B --> E[Deadline Risk Analyzer]
+    D --> F[Academic Rescue Mode]
+    E --> F
+    B --> G[Progress Dashboard]
+    B <--> H[(Persistent Storage)]
 ```
 
 ## Core Logic
