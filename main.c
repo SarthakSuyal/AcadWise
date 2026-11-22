@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include "AcadWise.h"
 
+// ========================================
+// DISPLAY MAIN MENU
+// ========================================
 
 void showMenu(void) {
     printHeader("ACADWISE v1.0");
@@ -40,11 +43,19 @@ void showMenu(void) {
     printf("\n  Enter your choice: ");
 }
 
+// ========================================
+// MAIN PROGRAM
+// ========================================
 
 int main(void) {
     int choice;
+
+    // Restore saved assignments
     loadTasks();
+
+    // Update deadline countdowns
     updateDeadlines();
+
     do {
         updateDeadlines();
         showMenu();
@@ -52,6 +63,7 @@ int main(void) {
         choice = readInt("", 0, 10);
 
         switch (choice) {
+
             case 1:
                 addTask();
                 break;
@@ -87,18 +99,24 @@ int main(void) {
             case 9:
                 deleteTask();
                 break;
-            
-            case 0:
-                saveTasks();
-                printf("\nThank you for using AcadWise!\n");
-                break;
 
             case 10:
                 updateTaskProgress();
                 break;
 
+            case 0:
+                saveTasks();
+                printf("\nThank you for using AcadWise!\n");
+                break;
+
             default:
                 printf("\nInvalid choice!\n");
+                break;
+        }
+
+        // Wait before returning to the main menu
+        if (choice != 0) {
+            pauseScreen();
         }
 
     } while (choice != 0);

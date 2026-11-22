@@ -63,19 +63,12 @@ void printProgressBar(float percentage) {
 
 // Wait for user to continue
 void pauseScreen(void) {
-    char buffer[8];
+    int ch;
 
-    printf("\nPress Enter to continue...");
+    printf("\nPress Enter to return to Main Menu...");
     fflush(stdout);
 
-    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
-        return;
-    }
-
-    // Discard extra characters if necessary
-    if (buffer[0] != '\n') {
-        int ch;
-        while ((ch = getchar()) != '\n' && ch != EOF) {
-        }
+    while ((ch = getchar()) != '\n' && ch != EOF) {
+        // Wait for Enter
     }
 }
