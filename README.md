@@ -104,11 +104,9 @@ cd AcadWise
 **macOS / Linux**
 
 ```bash
-gcc -std=c11 -Wall -Wextra *.c -o acadwise
+clang -std=c11 -Wall -Wextra *.c -o acadwise
 ./acadwise
 ```
-
-On macOS, Clang may be used instead of GCC.
 
 **Windows (MinGW-w64)**
 
